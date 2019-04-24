@@ -6,6 +6,7 @@
 package atm.view;
 
 import atm.controller.MainController;
+import atm.model.Account;
 import atm.model.BankDatabase;
 import atmmvc.Keypad;
 
@@ -17,30 +18,29 @@ public class BalanceInquiry implements View{
     BankDatabase database;
     Keypad keypad;
     MainController controller; 
-    int accountNumber;
+    Account account;
     
-    public BalanceInquiry(BankDatabase database, Keypad keypad, int accountNumber){
+    public BalanceInquiry(BankDatabase database, Keypad keypad, Account account){
         
         this.database = database;
         this.keypad = keypad;
-        this.accountNumber = accountNumber;
+        this.account = account;
     }
     
     @Override
     public void show() {
         
     double availableBalance = 
-         database.getAvailableBalance(accountNumber);
+         account.getAvailableBalance();
 
     double totalBalance = 
-         database.getTotalBalance(accountNumber);
+         account.getTotalBalance();
     
       System.out.println("\nBalance Information:");
       System.out.println(" - Available balance: "); 
       System.out.println(availableBalance);
       System.out.println("\n - Total balance:     ");
       System.out.println(totalBalance);
-//      screen.displayMessageLine("");
     }
 
     @Override

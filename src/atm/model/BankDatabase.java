@@ -18,7 +18,7 @@ public class BankDatabase {
       accounts[1] = new Account(8765, 5678, 200.0, 200.0);  
    }
    
-   private Account getAccount(int accountNumber) {
+   public Account getAccount(int accountNumber) {
       for(int i = 0;i<accounts.length;i++){
           if(accountNumber == accounts[i].getAccountNumber()){
               return accounts[i];

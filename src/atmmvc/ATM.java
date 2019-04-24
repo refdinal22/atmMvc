@@ -6,6 +6,7 @@
 package atmmvc;
 
 import atm.controller.MainController;
+import atm.model.Account;
 import atm.model.BankDatabase;
 import atm.view.*;
 
@@ -19,8 +20,11 @@ public class ATM {
     private BankDatabase bankdatabase;
     private MainController maincontroller;
     private DepositSlot depositslot;
+    private Screen screen;
+    private CashDispenser cashDispenser;
     private boolean userAuthenticated;
     private int currentAccountNumber;
+    private Account currentAccount;
     
     //menu
     private static final int BALANCE_INQUIRY = 1;
@@ -31,9 +35,11 @@ public class ATM {
     public ATM(){
         userAuthenticated = false;
         keypad = new Keypad();
+        screen = new Screen();
         bankdatabase = new BankDatabase();
         depositslot = new DepositSlot();
         maincontroller = new MainController(bankdatabase);
+        cashDispenser = new CashDispenser();
     }
     
     void run(){
@@ -44,7 +50,7 @@ public class ATM {
             View userauth = new AuthenticateUserView(keypad, maincontroller); // authenticate user
             userauth.show();
             userAuthenticated = maincontroller.getUserAuthenticated();
-            currentAccountNumber = maincontroller.getAccountNumber();
+            currentAccount = maincontroller.getAccount();
          }
          
          performTransactions(); // user is now authenticated
@@ -72,9 +78,14 @@ public class ATM {
             case BALANCE_INQUIRY:         
 
                // initialize as new object of chosen type
-               currentView = new BalanceInquiry(bankdatabase, keypad, currentAccountNumber);                  
+               currentView = new BalanceInquiry(bankdatabase, keypad, currentAccount);                  
                currentView.show(); // execute transaction
                break; 
+               
+            case WITHDRAWAL:
+                currentView = new Withdrawal(keypad, cashDispenser, screen, bankdatabase, maincontroller, currentAccount);
+                currentView.show();
+                break;
                
             case EXIT: // user chose to terminate session
                userExited = true; // this ATM session should end
