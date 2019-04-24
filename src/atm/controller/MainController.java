@@ -5,6 +5,7 @@
  */
 package atm.controller;
 
+import atm.model.Account;
 import atm.model.BankDatabase;
 
 /**
@@ -12,15 +13,16 @@ import atm.model.BankDatabase;
  * @author Gita
  */
 public class MainController {
-    BankDatabase bankdatabase;
+    private BankDatabase bankdatabase;
     private boolean userAuthenticated; // whether user is authenticated
-    private int currentAccountNumber;
+//    private int currentAccountNumber;
+    private Account currentAccount;
     private int menu;
    
     public MainController(BankDatabase bankdatabase){
         this.bankdatabase = bankdatabase;
         userAuthenticated = false;
-        currentAccountNumber = 0;
+        currentAccount = null;
         menu = 0;
     }
     
@@ -28,7 +30,7 @@ public class MainController {
     public void authenticate(int accountNumber, int pin){
         userAuthenticated = bankdatabase.authenticateUser(accountNumber, pin);
         if(userAuthenticated){
-            currentAccountNumber = accountNumber;
+            currentAccount = bankdatabase.getAccount(accountNumber);
         }
     }
     //menu
@@ -37,11 +39,11 @@ public class MainController {
     }
     
     public void debit(int userAccountNumber, double amount) {
-      bankdatabase.debit(userAccountNumber, amount);
+      currentAccount.debit(amount);
     } 
     
     public void credit(int userAccountNumber, double amount) {
-      bankdatabase.credit(userAccountNumber, amount);
+      currentAccount.credit(amount);
     } 
     
     //getter
@@ -49,8 +51,8 @@ public class MainController {
         return userAuthenticated;
     }
     
-    public int getAccountNumber(){
-        return currentAccountNumber;
+    public Account getAccount(){
+        return currentAccount;
     }
     
     public int getMenu(){
