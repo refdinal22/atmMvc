@@ -86,6 +86,11 @@ public class ATM {
                 currentView = new Withdrawal(keypad, cashDispenser, screen, bankdatabase, maincontroller, currentAccount);
                 currentView.show();
                 break;
+                
+            case DEPOSIT:
+                currentView = new Deposit(keypad, depositslot, currentAccount, screen, maincontroller, currentAccount);
+                currentView.show();
+                break;
                
             case EXIT: // user chose to terminate session
                userExited = true; // this ATM session should end
